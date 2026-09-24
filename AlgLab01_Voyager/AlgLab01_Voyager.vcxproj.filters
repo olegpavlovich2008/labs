@@ -15,11 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Perebor.cpp">
+    <ClCompile Include="StraightAlgorithm.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe%28Perebor%29.txt" />
+    <Text Include="Results.txt" />
   </ItemGroup>
 </Project>
