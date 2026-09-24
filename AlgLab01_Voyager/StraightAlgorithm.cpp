@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <chrono>
 #include <random>
 #include <locale.h>
@@ -10,10 +10,15 @@ int main()
     setlocale(LC_ALL, "RUS");
 
     int n, start_city;
-    cout << "Ââåäèòå êîë-âî ãîðîäîâ: ";
+    cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐºÐ¾Ð»-Ð²Ð¾ Ð³Ð¾Ñ€Ð¾Ð´Ð¾Ð² (2 >= n <= 15): ";
     cin >> n;
-    cout << "Ââåäèòå ñòàðòîâûé ãîðîä: ";
+    cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÑÑ‚Ð°Ñ€Ñ‚Ð¾Ð²Ñ‹Ð¹ Ð³Ð¾Ñ€Ð¾Ð´: ";
     cin >> start_city;
+
+    if (n > 15 || n < 2)
+    {
+        return 1;
+    }
 
     int matrix[15][15];
 
@@ -21,7 +26,7 @@ int main()
     std::mt19937_64 generator(randomDevice());
     std::uniform_int_distribution<int> distribution(1, 99);
 
-    cout << "\nÌàòðèöà ñòîèìîñòåé:" << endl;
+    cout << "\nÐœÐ°Ñ‚Ñ€Ð¸Ñ†Ð° ÑÑ‚Ð¾Ð¸Ð¼Ð¾ÑÑ‚ÐµÐ¹:" << endl;
     for (int i = 0; i < n; ++i)
     {
         for (int j = 0; j < n; ++j)
@@ -41,9 +46,9 @@ int main()
 
     int perm_cities[15];
     int idx = 0;
-    for (int i = 0; i < n; ++i) 
+    for (int i = 0; i < n; ++i)
     {
-        if (i != start_city) 
+        if (i != start_city)
         {
             perm_cities[idx++] = i;
         }
@@ -67,39 +72,39 @@ int main()
         int current_path[16];
         current_path[0] = start_city;
 
-        for (int i = 0; i < size_perm; ++i) 
+        for (int i = 0; i < size_perm; ++i)
         {
             current_cost += matrix[prev_city][perm_cities[i]];
             prev_city = perm_cities[i];
             current_path[i + 1] = prev_city;
         }
-
         current_cost += matrix[prev_city][start_city];
         current_path[n] = start_city;
 
-        if (current_cost < min_cost) 
+        if (current_cost < min_cost)
         {
             min_cost = current_cost;
-            for (int i = 0; i <= n; ++i) 
+            for (int i = 0; i <= n; ++i)
             {
                 best_path[i] = current_path[i];
             }
         }
 
-
         int k = size_perm - 2;
-        while (k >= 0 && perm_cities[k] >= perm_cities[k + 1]) 
+        while (k >= 0 && perm_cities[k] >= perm_cities[k + 1])
         {
             k--;
         }
 
-        if (k < 0) 
+        if (k < 0)
         {
             has_next_permutation = false;
         }
-        else {
+        else
+        {
             int l = size_perm - 1;
-            while (perm_cities[l] <= perm_cities[k]) 
+
+            while (perm_cities[l] <= perm_cities[k])
             {
                 l--;
             }
@@ -107,7 +112,7 @@ int main()
 
             int start = k + 1;
             int end = size_perm - 1;
-            while (start < end) 
+            while (start < end)
             {
                 std::swap(perm_cities[start], perm_cities[end]);
                 start++;
@@ -119,21 +124,19 @@ int main()
 
 
 
-    std::chrono::high_resolution_clock::time_point timeEnd = std::chrono::high_resolution_clock::now();
-    std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeBegin);
+    std::chrono::high_resolution_clock::time_point exactEnd = std::chrono::high_resolution_clock::now();
+    std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(exactEnd - timeBegin);
 
 
 
-    cout << "\n=== ÐÅÇÓËÜÒÀÒ ===" << endl;
-    cout << "Ìèíèìàëüíàÿ ñòîèìîñòü: " << min_cost << endl;
-    cout << "Îïòèìàëüíûé ìàðøðóò: ";
-    for (int i = 0; i <= n; ++i) 
-    {
+    cout << "\n=== Ð Ð•Ð—Ð£Ð›Ð¬Ð¢ÐÐ¢ ===" << endl;
+    cout << "ÐœÐ¸Ð½Ð¸Ð¼Ð°Ð»ÑŒÐ½Ð°Ñ ÑÑ‚Ð¾Ð¸Ð¼Ð¾ÑÑ‚ÑŒ: " << min_cost << endl;
+    cout << "ÐžÐ¿Ñ‚Ð¸Ð¼Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¼Ð°Ñ€ÑˆÑ€ÑƒÑ‚: ";
+    for (int i = 0; i <= n; ++i) {
         cout << best_path[i] << (i == n ? "" : " - ");
     }
     cout << endl;
-
-    cout << "Âðåìÿ ðàñ÷¸òà: " << interval.count() / 1000.0 << " ñ." << endl;
+    cout << "Ð’Ñ€ÐµÐ¼Ñ Ñ€Ð°ÑÑ‡Ñ‘Ñ‚Ð°: " << interval.count() / 1000.0 << " Ñ." << endl;
 
     return 0;
 }
