@@ -19,4 +19,15 @@ struct Segment
     double getY2() const;
     void setY2(double newValue);
 
+    double length() const;
+
+    void printPointInRatio(double lambda) const;
+
+    bool operator==(const Segment& other) const;
+
+    bool isParallelToOx() const;
+
+    bool isParallelTo(const Segment& other) const;
+
+    bool intersectsOy() const;
 };

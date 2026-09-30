@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include "Segment.h"
 
 using namespace std;
@@ -59,4 +60,52 @@ double Segment::getY2() const
 void Segment::setY2(double newValue) 
 { 
     y2 = newValue;
+}
+
+double Segment::length() const
+{
+    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
+void Segment::printPointInRatio(double lambda) const
+{
+    if (abs(lambda + 1.0) < 0.000001)
+    {
+        cout << "Ошибка: значение не может быть равно -1.";
+        return;
+    }
+
+    double rx = (x1 + lambda * x2) / (1.0 + lambda);
+    double ry = (y1 + lambda * y2) / (1.0 + lambda);
+
+    cout << "(" << rx << ", " << ry << ")";
+}
+
+bool Segment::operator==(const Segment& other) const
+{
+    return abs(length() - other.length()) < 0.000001;
+}
+
+bool Segment::isParallelToOx() const
+{
+    bool sameY = (abs(y1 - y2) < 0.000001);
+    bool differentX = (abs(x1 - x2) > 0.000001);
+
+    return (sameY && differentX);
+}
+
+bool Segment::isParallelTo(const Segment& other) const
+{
+    double dx1 = x2 - x1;
+    double dy1 = y2 - y1;
+    double dx2 = other.x2 - other.x1;
+    double dy2 = other.y2 - other.y1;
+
+    return (abs(dx1 * dy2 - dy1 * dx2) < 0.000001);
+}
+
+
+bool Segment::intersectsOy() const
+{
+    return ((x1 * x2 < 0) || ((abs(x1) < 0.000001) || (abs(x2) < 0.000001)));
 }
