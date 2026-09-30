@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <locale.h>
 
 #include "Segment.h"
@@ -10,17 +10,17 @@ int main()
     setlocale(LC_ALL, "Russian");
 
     Segment segment1;
-    cout << "1) Îòðåçîê: ";
+    cout << "1) ÐžÑ‚Ñ€ÐµÐ·Ð¾Ðº: ";
     segment1.print();
     cout << endl;
 
-    cout << "2) Ââåäèòå êîîðäèíàòû (x1 y1 x2 y2): ";
+    cout << "2) Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹ (x1 y1 x2 y2): ";
     segment1.read();
     cout << " ";
     segment1.print();
     cout << endl;
 
-    cout << "3) Ïðîâåðêà àêñåññîðà: " << "\n";
+    cout << "3) ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð°ÐºÑÐµÑÑÐ¾Ñ€Ð°: " << "\n";
     cout << "x1 = " << segment1.getX1() << " -> ";
     segment1.setX1(segment1.getX1() + 1.0);
     cout << "x1 = " << segment1.getX1() << "\n";;
