@@ -1,9 +1,8 @@
 #pragma once
 
-struct Segment
+class Segment
 {
-    double x1, y1;
-    double x2, y2;
+public:
 
     Segment(double x1Val = 0.0, double y1Val = 0.0, double x2Val = 0.0, double y2Val = 0.0);
 
@@ -35,4 +34,12 @@ struct Segment
 
     bool containsPoint(double px, double py) const;
 
+    double getRatioOfPoint(double px, double py) const;
+
+    Segment operator*(double k) const;
+
+
+private:
+    double x1, y1;
+    double x2, y2;
 };

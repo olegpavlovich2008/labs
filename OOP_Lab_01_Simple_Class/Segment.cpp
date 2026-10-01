@@ -140,3 +140,35 @@ bool Segment::containsPoint(double px, double py) const
 
     return (insideX && insideY);
 }
+
+double Segment::getRatioOfPoint(double px, double py) const
+{
+    if (!containsPoint(px, py))
+    {
+        cout << "Ошибка: точка не принадлежит отрезку.";
+        return 0;
+    }
+
+    if (abs(px - x2) < 0.000001 && abs(py - y2) < 0.000001)
+    {
+        cout << "Ошибка: точка совпадает с концом отрезка.";
+        return 0;
+    }
+
+    if (abs(x2 - x1) > abs(y2 - y1))
+    {
+        return (px - x1) / (x2 - px);
+    }
+    else
+    {
+        return (py - y1) / (y2 - py);
+    }
+}
+
+Segment Segment::operator*(double k) const
+{
+    double newX2 = x1 + k * (x2 - x1);
+    double newY2 = y1 + k * (y2 - y1);
+
+    return Segment(x1, y1, newX2, newY2);
+}
