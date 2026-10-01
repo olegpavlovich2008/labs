@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <cmath>
 #include "Segment.h"
 
@@ -71,7 +71,7 @@ void Segment::printPointInRatio(double lambda) const
 {
     if (abs(lambda + 1.0) < 0.000001)
     {
-        cout << "Îøèáêà: çíà÷åíèå íå ìîæåò áûòü ðàâíî -1.";
+        cout << "ÐžÑˆÐ¸Ð±ÐºÐ°: Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ð½Ðµ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ñ€Ð°Ð²Ð½Ð¾ -1.";
         return;
     }
 
@@ -145,13 +145,13 @@ double Segment::getRatioOfPoint(double px, double py) const
 {
     if (!containsPoint(px, py))
     {
-        cout << "Îøèáêà: òî÷êà íå ïðèíàäëåæèò îòðåçêó.";
+        cout << "ÐžÑˆÐ¸Ð±ÐºÐ°: Ñ‚Ð¾Ñ‡ÐºÐ° Ð½Ðµ Ð¿Ñ€Ð¸Ð½Ð°Ð´Ð»ÐµÐ¶Ð¸Ñ‚ Ð¾Ñ‚Ñ€ÐµÐ·ÐºÑƒ.";
         return 0;
     }
 
     if (abs(px - x2) < 0.000001 && abs(py - y2) < 0.000001)
     {
-        cout << "Îøèáêà: òî÷êà ñîâïàäàåò ñ êîíöîì îòðåçêà.";
+        cout << "ÐžÑˆÐ¸Ð±ÐºÐ°: Ñ‚Ð¾Ñ‡ÐºÐ° ÑÐ¾Ð²Ð¿Ð°Ð´Ð°ÐµÑ‚ Ñ ÐºÐ¾Ð½Ñ†Ð¾Ð¼ Ð¾Ñ‚Ñ€ÐµÐ·ÐºÐ°.";
         return 0;
     }
 
