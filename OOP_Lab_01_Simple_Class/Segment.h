@@ -30,4 +30,9 @@ struct Segment
     bool isParallelTo(const Segment& other) const;
 
     bool intersectsOy() const;
+
+    bool intersectsLine(double A, double B, double C) const;
+
+    bool containsPoint(double px, double py) const;
+
 };

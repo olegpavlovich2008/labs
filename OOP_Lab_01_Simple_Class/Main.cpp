@@ -30,15 +30,18 @@ int main()
 
     cout << "4) Длина отрезка = " << segment1.length() << endl;
 
-    double lambda = 1.0;
-    cout << "5) Точка (лямбда " << lambda << ") = ";
+    double a = 1.0;
+    double b = 2.0;
+    double lambda = a / b;
+    cout << "5) Точка, делящая отрезок в отношении " << a << ":" << b << " = ";
     segment1.printPointInRatio(lambda);
     cout << endl;
 
     Segment segment2(0.0, 0.0, 3.0, 4.0);
     cout << "6) Отрезок 2: ";
     segment2.print();
-    cout << " Равны: ";
+    cout << endl;
+    cout << "   Равны: ";
     if (segment1 == segment2) cout << "Да." << endl;
     else cout << "Нет" << endl;
 
@@ -52,6 +55,16 @@ int main()
 
     cout << "9) Пересекает Oy: ";
     if (segment1.intersectsOy()) cout << "Да" << endl;
+    else cout << "Нет" << endl;
+
+    double A = 1.0, B = 1.0, C = -4.0;
+    cout << "10) Пересекает прямую (" << A << "x + " << B << "y + " << C << " = 0): ";
+    if (segment1.intersectsLine(A, B, C)) cout << "Да" << endl;
+    else cout << "Нет" << endl;
+
+    double px = 2.0, py = 2.0;
+    cout << "11) Точка (" << px << ", " << py << ") лежит на отрезке: ";
+    if (segment1.containsPoint(px, py)) cout << "Да" << endl;
     else cout << "Нет" << endl;
 
     return 0;

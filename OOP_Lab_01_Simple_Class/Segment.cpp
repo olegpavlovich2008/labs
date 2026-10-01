@@ -104,8 +104,39 @@ bool Segment::isParallelTo(const Segment& other) const
     return (abs(dx1 * dy2 - dy1 * dx2) < 0.000001);
 }
 
-
 bool Segment::intersectsOy() const
 {
     return ((x1 * x2 < 0) || ((abs(x1) < 0.000001) || (abs(x2) < 0.000001)));
+}
+
+bool Segment::intersectsLine(double A, double B, double C) const
+{
+    double val1 = A * x1 + B * y1 + C;
+    double val2 = A * x2 + B * y2 + C;
+
+    if (abs(val1) < 0.000001)
+    {
+        val1 = 0.0;
+    }
+    if (abs(val2) < 0.000001)
+    {
+        val2 = 0.0;
+    }
+
+    return (val1 * val2 <= 0.0);
+}
+
+bool Segment::containsPoint(double px, double py) const
+{
+    double val = (x2 - x1) * (py - y1) - (y2 - y1) * (px - x1);
+
+    if (abs(val) > 0.000001)
+    {
+        return false;
+    }
+
+    bool insideX = abs(abs(px - x1) + abs(px - x2) - abs(x1 - x2)) < 0.000001;
+    bool insideY = abs(abs(py - y1) + abs(py - y2) - abs(y1 - y2)) < 0.000001;
+
+    return (insideX && insideY);
 }
