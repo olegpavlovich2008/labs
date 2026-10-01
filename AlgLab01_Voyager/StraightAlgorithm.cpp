@@ -9,9 +9,13 @@ int main()
 {
     setlocale(LC_ALL, "RUS");
 
-    int n, start_city;
+    int n, start_city, lt, rt;
     cout << "Введите кол-во городов (2 >= n <= 15): ";
     cin >> n;
+    cout << "Введите минимальную стоимость: ";
+    cin >> lt;
+    cout << "Введите максимальную стоимость: ";
+    cin >> rt;
     cout << "Введите стартовый город: ";
     cin >> start_city;
 
@@ -25,7 +29,7 @@ int main()
 
     std::random_device randomDevice;
     std::mt19937_64 generator(randomDevice());
-    std::uniform_int_distribution<int> distribution(1, 99);
+    std::uniform_int_distribution<int> distribution(lt, rt);
 
     cout << "\nМатрица стоимостей:" << endl;
     for (int i = 0; i < n; ++i)
@@ -57,13 +61,11 @@ int main()
 
     int size_perm = n - 1;
     int min_cost = 2147483647;
+    int max_cost = -1;
     int best_path[16];
-
-
+    int worst_path[16];
 
     std::chrono::high_resolution_clock::time_point timeBegin = std::chrono::high_resolution_clock::now();
-
-
 
     bool has_next_permutation = true;
     do {
@@ -82,6 +84,7 @@ int main()
         current_cost += matrix[prev_city][start_city];
         current_path[n] = start_city;
 
+
         if (current_cost < min_cost)
         {
             min_cost = current_cost;
@@ -90,6 +93,18 @@ int main()
                 best_path[i] = current_path[i];
             }
         }
+
+
+
+        if (current_cost > max_cost)
+        {
+            max_cost = current_cost;
+            for (int i = 0; i <= n; ++i)
+            {
+                worst_path[i] = current_path[i];
+            }
+        }
+
 
         int k = size_perm - 2;
         while (k >= 0 && perm_cities[k] >= perm_cities[k + 1])
@@ -123,18 +138,23 @@ int main()
 
     } while (has_next_permutation);
 
-
-
     std::chrono::high_resolution_clock::time_point exactEnd = std::chrono::high_resolution_clock::now();
     std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(exactEnd - timeBegin);
-
-
 
     cout << "\n=== РЕЗУЛЬТАТ ===" << endl;
     cout << "Минимальная стоимость: " << min_cost << endl;
     cout << "Оптимальный маршрут: ";
-    for (int i = 0; i <= n; ++i) {
+    for (int i = 0; i <= n; ++i) 
+    {
         cout << best_path[i] << (i == n ? "" : " - ");
+    }
+    cout << endl;
+
+    cout << "Максимальная стоимость: " << max_cost << endl;
+    cout << "Наихудший маршрут: ";
+    for (int i = 0; i <= n; ++i) 
+    {
+        cout << worst_path[i] << (i == n ? "" : " - ");
     }
     cout << endl;
     cout << "Время расчёта: " << interval.count() / 1000.0 << " с." << endl;
