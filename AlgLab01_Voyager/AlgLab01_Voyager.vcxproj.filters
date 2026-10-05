@@ -22,4 +22,9 @@
   <ItemGroup>
     <Text Include="Results.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Lib.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
