@@ -146,12 +146,87 @@ vector<int> findAll(const string& s, const string& p)
     return array;
 }
 
+vector<int> findInRange(const string& s, const string& p, int start, int end)
+{
+    vector<int> array;
+    int N = s.size();
+    int M = p.size();
+
+    if (M == 0)
+        return array;
+    if (start < 0 || end >= N || start > end || (end - start + 1) < M)
+        return array;
+
+    int TAB[256];
+    for (int idx = 0; idx < 256; idx = idx + 1)
+    {
+        TAB[idx] = M;
+    }
+    for (int idx = 0; idx < M - 1; idx = idx + 1)
+    {
+        unsigned char symbol = (unsigned char)p[idx];
+        TAB[symbol] = M - 1 - idx;
+    }
+
+    int i = start + M - 1;
+
+    while (i <= end)
+    {
+        int k = i;
+        int j = M - 1;
+        int count = 0;
+
+        while (j >= 0)
+        {
+            if (s[k] == p[j])
+            {
+                k = k - 1;
+                j = j - 1;
+                count = count + 1;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if (j < 0)
+        {
+            array.push_back(i - M + 1);
+
+            if (i + 1 <= end)
+            {
+                unsigned char nextChar = (unsigned char)s[i + 1];
+                i = i + TAB[nextChar];
+            }
+            else
+            {
+                i = i + 1;
+            }
+        }
+        else
+        {
+            unsigned char badChar = (unsigned char)s[k];
+            int step = TAB[badChar] - count;
+
+            if (1 > step)
+            {
+                step = 1;
+            }
+
+            i = i + step;
+        }
+    }
+
+    return array;
+}
+
 
 int main() 
 {
     setlocale(LC_ALL, "RUS");
 
-    string s = "std::move_iterator is an iterator adaptor";
+    string s = "std::move_iterator is an iterator adaptor which behaves exactly like the underlying iterator";
     string p = "tor";
     cout << "=== ИСХОДНЫЕ ДАННЫЕ ===" << endl;
     cout << "Текст (s): " << s << endl;
@@ -174,6 +249,36 @@ int main()
         {
             cout << ", ";
         }
+    }
+    cout << endl;
+    cout << endl;
+
+    cout << "=== ПОИСК В ЗАДАННЫХ ДИАПАЗОНАХ ===" << endl;
+
+    vector<int> res1 = findInRange(s, p, 0, 91);
+    cout << "Индексы в диапазоне (0, 91): ";
+    for (size_t index = 0; index < res1.size(); index = index + 1)
+    {
+        cout << res1[index];
+        if (index < res1.size() - 1) cout << ", ";
+    }
+    cout << endl;
+
+    vector<int> res2 = findInRange(s, p, 17, 91);
+    cout << "Индексы в диапазоне (17, 91): ";
+    for (size_t index = 0; index < res2.size(); index = index + 1)
+    {
+        cout << res2[index];
+        if (index < res2.size() - 1) cout << ", ";
+    }
+    cout << endl;
+
+    vector<int> res3 = findInRange(s, p, 28, 36);
+    cout << "Индексы в диапазоне (28, 36): ";
+    for (size_t index = 0; index < res3.size(); index = index + 1)
+    {
+        cout << res3[index];
+        if (index < res3.size() - 1) cout << ", ";
     }
     cout << endl;
 
