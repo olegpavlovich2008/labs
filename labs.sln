@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlgLab01_Voyager", "AlgLab0
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OOP_Lab_01_Simple_Class", "OOP_Lab_01_Simple_Class\OOP_Lab_01_Simple_Class.vcxproj", "{4EBCA182-E343-4C8B-9248-C7F8BE66275C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlgLab02_BM_Search", "AlgLab02_BM_Search\AlgLab02_BM_Search.vcxproj", "{B1E73BE2-D405-4457-8BC6-264B78E96829}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{4EBCA182-E343-4C8B-9248-C7F8BE66275C}.Release|x64.Build.0 = Release|x64
 		{4EBCA182-E343-4C8B-9248-C7F8BE66275C}.Release|x86.ActiveCfg = Release|Win32
 		{4EBCA182-E343-4C8B-9248-C7F8BE66275C}.Release|x86.Build.0 = Release|Win32
+		{B1E73BE2-D405-4457-8BC6-264B78E96829}.Debug|x64.ActiveCfg = Debug|x64
+		{B1E73BE2-D405-4457-8BC6-264B78E96829}.Debug|x64.Build.0 = Debug|x64
+		{B1E73BE2-D405-4457-8BC6-264B78E96829}.Debug|x86.ActiveCfg = Debug|Win32
+		{B1E73BE2-D405-4457-8BC6-264B78E96829}.Debug|x86.Build.0 = Debug|Win32
+		{B1E73BE2-D405-4457-8BC6-264B78E96829}.Release|x64.ActiveCfg = Release|x64
+		{B1E73BE2-D405-4457-8BC6-264B78E96829}.Release|x64.Build.0 = Release|x64
+		{B1E73BE2-D405-4457-8BC6-264B78E96829}.Release|x86.ActiveCfg = Release|Win32
+		{B1E73BE2-D405-4457-8BC6-264B78E96829}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
