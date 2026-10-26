@@ -4,33 +4,44 @@
 
 DynamicArray::DynamicArray() : arrayData_(nullptr), arrayLength_(0)
 {
-
 }
 
 DynamicArray::DynamicArray(const int* const arrayData, const int arrayLength) : arrayLength_(arrayLength)
 {
-    arrayData_ = new int[arrayLength_];
-
-    for (int index = 0; index < arrayLength_; index++)
-        arrayData_[index] = arrayData[index];
+    if (arrayLength_ > 0)
+    {
+        arrayData_ = new int[arrayLength_];
+        for (int index = 0; index < arrayLength_; index++)
+            arrayData_[index] = arrayData[index];
+    }
+    else
+    {
+        arrayData_ = nullptr;
+        arrayLength_ = 0;
+    }
 }
 
 DynamicArray::DynamicArray(const DynamicArray& other)
 {
     arrayLength_ = other.arrayLength_;
-
-    arrayData_ = new int[arrayLength_];
-
-    for (int index = 0; index < arrayLength_; index++)
-        arrayData_[index] = other.arrayData_[index];
+    if (arrayLength_ > 0)
+    {
+        arrayData_ = new int[arrayLength_];
+        for (int index = 0; index < arrayLength_; index++)
+            arrayData_[index] = other.arrayData_[index];
+    }
+    else
+    {
+        arrayData_ = nullptr;
+    }
 }
 
 DynamicArray::DynamicArray(DynamicArray&& other)
 {
     arrayLength_ = other.arrayLength_;
-    other.arrayLength_ = 0;
-
     arrayData_ = other.arrayData_;
+
+    other.arrayLength_ = 0;
     other.arrayData_ = nullptr;
 }
 
@@ -44,15 +55,19 @@ DynamicArray& DynamicArray::operator=(const DynamicArray& other)
     if (this != &other)
     {
         delete[] arrayData_;
-
         arrayLength_ = other.arrayLength_;
 
-        arrayData_ = new int[arrayLength_];
-
-        for (int index = 0; index < arrayLength_; index++)
-            arrayData_[index] = other.arrayData_[index];
+        if (arrayLength_ > 0)
+        {
+            arrayData_ = new int[arrayLength_];
+            for (int index = 0; index < arrayLength_; index++)
+                arrayData_[index] = other.arrayData_[index];
+        }
+        else
+        {
+            arrayData_ = nullptr;
+        }
     }
-
     return *this;
 }
 
@@ -63,15 +78,13 @@ DynamicArray& DynamicArray::operator=(DynamicArray&& other)
         delete[] arrayData_;
 
         arrayLength_ = other.arrayLength_;
-        other.arrayLength_ = 0;
-
         arrayData_ = other.arrayData_;
+
+        other.arrayLength_ = 0;
         other.arrayData_ = nullptr;
     }
-
     return *this;
 }
-
 
 int& DynamicArray::operator[](const int index)
 {
@@ -108,21 +121,21 @@ int DynamicArray::find(int value) const
         if (arrayData_[index] == value)
             return index;
     }
-    return (-1);
+    return -1;
 }
 
-void DynamicArray::sort()  //шейкерная
+void DynamicArray::sort() // шейкерная
 {
     if (arrayLength_ <= 1)
         return;
 
     int lt = 0;
     int rt = arrayLength_ - 1;
-    bool swap = true;
+    bool shifted = true;
 
-    while (lt < rt && swap)
+    while (lt < rt&& shifted)
     {
-        swap = false;
+        shifted = false;
 
         for (int i = lt; i < rt; i++)
         {
@@ -131,8 +144,7 @@ void DynamicArray::sort()  //шейкерная
                 int t = arrayData_[i];
                 arrayData_[i] = arrayData_[i + 1];
                 arrayData_[i + 1] = t;
-
-                swap = true;
+                shifted = true;
             }
         }
         rt--;
@@ -144,8 +156,7 @@ void DynamicArray::sort()  //шейкерная
                 int t = arrayData_[i];
                 arrayData_[i] = arrayData_[i - 1];
                 arrayData_[i - 1] = t;
-
-                swap = true;
+                shifted = true;
             }
         }
         lt++;
@@ -188,8 +199,8 @@ bool DynamicArray::insertID(const int index, int value)
         return false;
 
     int* newBuffer = new int[arrayLength_ + 1];
-        for (int i = 0; i < index; i++)
-            newBuffer[i] = arrayData_[i];
+    for (int i = 0; i < index; i++)
+        newBuffer[i] = arrayData_[i];
 
     newBuffer[index] = value;
 
@@ -251,7 +262,7 @@ void DynamicArray::removeAllVal(int value)
         }
     }
 
-    if (countToDelete == 0) 
+    if (countToDelete == 0)
         return;
 
     int newLength = arrayLength_ - countToDelete;
@@ -282,21 +293,20 @@ void DynamicArray::removeAllVal(int value)
 
 std::ostream& operator<<(std::ostream& os, const DynamicArray& array)
 {
-    if (array.arrayLength_ == 0)
+    int len = array.getLength();
+    if (len == 0)
     {
         os << "[]";
         return os;
     }
 
     os << "[";
-
-    for (int index = 0; index < array.arrayLength_; index++)
+    for (int index = 0; index < len; index++)
     {
-        os << array.arrayData_[index];
-        if (index < array.arrayLength_ - 1)
+        os << array[index];
+        if (index < len - 1)
             os << ", ";
     }
-
     os << "]";
 
     return os;
@@ -310,29 +320,28 @@ std::istream& operator>>(std::istream& is, DynamicArray& array)
 
     if (length <= 0)
     {
-        delete[] array.arrayData_;
-        array.arrayData_ = nullptr;
-        array.arrayLength_ = 0;
+        DynamicArray emptyArray;
+        array.swap(emptyArray);
         return is;
     }
 
-    int* new_data = new int[length];
+    DynamicArray tempArray;
     std::cout << "   Введите элементы через пробел: ";
     for (int i = 0; i < length; i++)
     {
-        is >> new_data[i];
+        int val;
+        is >> val;
+        tempArray.insertID(i, val);
     }
 
-    delete[] array.arrayData_;
-    array.arrayData_ = new_data;
-    array.arrayLength_ = length;
-
+    array.swap(tempArray);
     return is;
 }
 
                                     // ИТЕРАТОРЫ //
 
-DynamicArray::iterator::iterator(int* arrayData, int elementIndex) : arrayData_(arrayData), elementIndex_(elementIndex)
+DynamicArray::iterator::iterator(int* arrayData, int elementIndex)
+    : arrayData_(arrayData), elementIndex_(elementIndex)
 {
 
 }
@@ -347,25 +356,26 @@ DynamicArray::iterator DynamicArray::end()
     return iterator(arrayData_, arrayLength_);
 }
 
-bool DynamicArray::iterator::operator!=(const DynamicArray::iterator& otherIterator)
+bool DynamicArray::iterator::operator==(const iterator& otherIterator) const
 {
-    if (arrayData_ != otherIterator.arrayData_) return true;
-    return elementIndex_ != otherIterator.elementIndex_;
+    return (arrayData_ == otherIterator.arrayData_) && (elementIndex_ == otherIterator.elementIndex_);
+}
+
+bool DynamicArray::iterator::operator!=(const iterator& otherIterator) const
+{
+    return !(*this == otherIterator);
 }
 
 DynamicArray::iterator& DynamicArray::iterator::operator++()
 {
     ++elementIndex_;
-
     return *this;
 }
 
 DynamicArray::iterator DynamicArray::iterator::operator++(int)
 {
     DynamicArray::iterator copy(*this);
-
     ++elementIndex_;
-
     return copy;
 }
 
@@ -374,11 +384,54 @@ int& DynamicArray::iterator::operator*()
     return arrayData_[elementIndex_];
 }
 
+DynamicArray::const_iterator::const_iterator(const int* arrayData, int elementIndex)
+    : arrayData_(arrayData), elementIndex_(elementIndex)
+{
+}
+
+DynamicArray::const_iterator DynamicArray::begin() const
+{
+    return const_iterator(arrayData_, 0);
+}
+
+DynamicArray::const_iterator DynamicArray::end() const
+{
+    return const_iterator(arrayData_, arrayLength_);
+}
+
+bool DynamicArray::const_iterator::operator==(const const_iterator& otherIterator) const
+{
+    return (arrayData_ == otherIterator.arrayData_) && (elementIndex_ == otherIterator.elementIndex_);
+}
+
+bool DynamicArray::const_iterator::operator!=(const const_iterator& otherIterator) const
+{
+    return !(*this == otherIterator);
+}
+
+DynamicArray::const_iterator& DynamicArray::const_iterator::operator++()
+{
+    ++elementIndex_;
+    return *this;
+}
+
+DynamicArray::const_iterator DynamicArray::const_iterator::operator++(int)
+{
+    DynamicArray::const_iterator copy(*this);
+    ++elementIndex_;
+    return copy;
+}
+
+const int& DynamicArray::const_iterator::operator*() const
+{
+    return arrayData_[elementIndex_];
+}
+
 DynamicArray& DynamicArray::operator+=(int value)
 {
     int* new_data = new int[arrayLength_ + 1];
 
-    for (int i = 0; i < arrayLength_; i++) 
+    for (int i = 0; i < arrayLength_; i++)
     {
         new_data[i] = arrayData_[i];
     }
@@ -413,7 +466,7 @@ DynamicArray& DynamicArray::operator+=(const DynamicArray& other)
 
     for (int i = 0; i < other.arrayLength_; i++)
     {
-        new_data[arrayLength_ + i] = other.arrayData_[i];
+        new_data[arrayLength_ + i] = other[i];
     }
 
     delete[] arrayData_;
@@ -436,7 +489,7 @@ bool DynamicArray::operator==(const DynamicArray& other) const
 
     for (int i = 0; i < arrayLength_; i++)
     {
-        if (arrayData_[i] != other.arrayData_[i])
+        if (arrayData_[i] != other[i])
         {
             return false;
         }
@@ -449,10 +502,9 @@ bool DynamicArray::operator!=(const DynamicArray& other) const
     return !(*this == other);
 }
 
-
 DynamicArray::iterator DynamicArray::insertIT(iterator pos, int value)
 {
-    int index = pos.elementIndex_;
+    int index = pos.getIndex();
     assert(index >= 0 && index <= arrayLength_ && "Индекс за пределами массива.");
 
     int* new_data = new int[arrayLength_ + 1];
@@ -476,19 +528,26 @@ DynamicArray::iterator DynamicArray::insertIT(iterator pos, int value)
     return iterator(arrayData_, index);
 }
 
-
 DynamicArray::iterator DynamicArray::delIT(iterator pos)
 {
-    int index = pos.elementIndex_;
+    int index = pos.getIndex();
     assert(index >= 0 && index < arrayLength_ && "Индекс за пределами массива.");
 
-    if (index == arrayLength_ - 1) 
+    if (arrayLength_ == 1)
+    {
+        delete[] arrayData_;
+        arrayData_ = nullptr;
+        arrayLength_ = 0;
+        return end();
+    }
+
+    if (index == arrayLength_ - 1)
     {
         arrayLength_--;
         return end();
     }
 
-    for (int i = index; i < arrayLength_ - 1; i++) 
+    for (int i = index; i < arrayLength_ - 1; i++)
     {
         arrayData_[i] = arrayData_[i + 1];
     }
@@ -499,17 +558,25 @@ DynamicArray::iterator DynamicArray::delIT(iterator pos)
 
 DynamicArray::iterator DynamicArray::delIT_InRange(iterator first, iterator last)
 {
-    int firstIdx = first.elementIndex_;
-    int lastIdx = last.elementIndex_;
+    int firstIdx = first.getIndex();
+    int lastIdx = last.getIndex();
 
     assert(firstIdx >= 0 && lastIdx <= arrayLength_ && firstIdx <= lastIdx);
 
     int numToDelete = lastIdx - firstIdx;
 
-    if (numToDelete == 0) 
+    if (numToDelete == 0)
         return first;
 
-    for (int i = lastIdx; i < arrayLength_; i++) 
+    if (arrayLength_ == numToDelete)
+    {
+        delete[] arrayData_;
+        arrayData_ = nullptr;
+        arrayLength_ = 0;
+        return end();
+    }
+
+    for (int i = lastIdx; i < arrayLength_; i++)
     {
         arrayData_[i - numToDelete] = arrayData_[i];
     }
@@ -517,9 +584,4 @@ DynamicArray::iterator DynamicArray::delIT_InRange(iterator first, iterator last
     arrayLength_ -= numToDelete;
 
     return iterator(arrayData_, firstIdx);
-}
-
-bool DynamicArray::iterator::operator==(const iterator& otherIterator) const
-{
-    return (arrayData_ == otherIterator.arrayData_) && (elementIndex_ == otherIterator.elementIndex_);
 }

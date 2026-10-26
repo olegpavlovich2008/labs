@@ -1,6 +1,5 @@
 ﻿#include <iostream>
 #include <locale.h>
-#include <algorithm>
 #include "DynamicArray.h"
 
 using namespace std;
@@ -121,6 +120,8 @@ int main()
     testDynamicArray1.sort();
     printArray(testDynamicArray1);
 
+    testDynamicArray1 = DynamicArray(testArray1, 14);
+
     cout << "\n4) Поиск, вставка и удаление элементов: \n";
     int valueToFind = 53;
     cout << "   Индекс элемента [" << valueToFind << "]: " << testDynamicArray1.find(valueToFind) << "\n";
@@ -132,7 +133,7 @@ int main()
     printArray(copyTestArray);
 
     copyTestArray.removeID(5);
-    cout << "   После удаления элемента по индексу [5]: ";
+    cout << "   После удаления элемента по индексу 5: ";
     printArray(copyTestArray);
 
     copyTestArray.removeVal(3);
@@ -141,12 +142,12 @@ int main()
 
     cout << "\n5) Проверка поиска минимума/максимума: \n";
     cout << "   Максимальный элемент: " << testDynamicArray1.getMax() << endl;
-    cout << "   Минимальный элемент: " << testDynamicArray1.getMin() << endl;
+    cout << "   Минимальный элемент:" << testDynamicArray1.getMin() << endl;
 
     cout << "\n6) Удаления всех элементов с заданным значением: \n";
     int dublicateArray[] = { 7, 1, 7, 7, 3, 7, 5 };
     DynamicArray testDublicates(dublicateArray, 7);
-    cout << "   Массив с до удаления: " << testDublicates << endl;
+    cout << "   Массив до удаления: " << testDublicates << endl;
     testDublicates.removeAllVal(7);
     cout << "   Массив после удаления всех элементов со значением 7: " << testDublicates << endl;
 
@@ -158,7 +159,7 @@ int main()
     cout << "   Массив B до: "; printArray(testDynamicArray3);
     cout << endl;
 
-    std::swap(testDynamicArray1, testDynamicArray3);
+    testDynamicArray1.swap(testDynamicArray3);
 
     cout << "   Массив A после: "; printArray(testDynamicArray1);
     cout << "   Массив B после: "; printArray(testDynamicArray3);
