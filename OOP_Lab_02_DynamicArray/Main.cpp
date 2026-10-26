@@ -1,10 +1,11 @@
 ﻿#include <iostream>
 #include <locale.h>
+#include <random>
 #include "DynamicArray.h"
 
 using namespace std;
 
-void printArray(const DynamicArray& array)
+void printArray(const DynamicArray<int>& array)
 {
     int arrayLength = array.getLength();
 
@@ -26,14 +27,14 @@ int main()
     int testArray1[] = { 1, 2, -1, 5, 3, -6, 3, -6, 0, 53, 36, 35, -30, -41 };
 
     cout << "=== ТЕСТИРОВАНИЕ ИТЕРАТОРОВ ===\n" << endl;
-    DynamicArray iteratorTestArray(testArray1, 5);
+    DynamicArray<int> iteratorTestArray(testArray1, 5);
 
     cout << "1) Тестовый массив: ";
     printArray(iteratorTestArray);
 
     cout << "\n2) Обход через итераторы: ";
-    DynamicArray::iterator it = iteratorTestArray.begin();
-    DynamicArray::iterator endIt = iteratorTestArray.end();
+    DynamicArray<int>::iterator it = iteratorTestArray.begin();
+    DynamicArray<int>::iterator endIt = iteratorTestArray.end();
     while (it != endIt)
     {
         cout << *it << " ";
@@ -48,7 +49,7 @@ int main()
 
     cout << "\n4) Тест постфиксного инкремента: " << endl;
     it = iteratorTestArray.begin();
-    DynamicArray::iterator oldIt = it++;
+    DynamicArray<int>::iterator oldIt = it++;
     cout << "   Значение старого итератора: " << *oldIt << endl;
     cout << "   Значение нового итератора: " << *it << endl;
 
@@ -60,30 +61,30 @@ int main()
     cout << endl;
 
     cout << "\n5) Тест операторов + и +=: \n";
-    DynamicArray arrOp;
+    DynamicArray<int> arrOp;
     arrOp += 10;
     arrOp += 20;
     cout << "   После += 10 и += 20: " << arrOp << endl;
 
-    DynamicArray arrOp2 = arrOp + 30;
+    DynamicArray<int> arrOp2 = arrOp + 30;
     cout << "   Новый массив (arrOp + 30): " << arrOp2 << endl;
 
     cout << "\n6) Тест вставки элемента перед итератором: ";
 
-    DynamicArray::iterator itInsert = arrOp2.begin();
+    DynamicArray<int>::iterator itInsert = arrOp2.begin();
     ++itInsert;
     arrOp2.insertIT(itInsert, 999);
     cout << arrOp2 << endl;
 
     cout << "\n7) Тест удаления элемента и диапазона через итераторы: \n";
 
-    DynamicArray::iterator itErase = arrOp2.begin();
+    DynamicArray<int>::iterator itErase = arrOp2.begin();
     ++itErase;
     arrOp2.delIT(itErase);
     cout << "   После удаления элемента 999: " << arrOp2 << endl;
 
-    DynamicArray::iterator firstDel = arrOp2.begin();
-    DynamicArray::iterator lastDel = arrOp2.begin();
+    DynamicArray<int>::iterator firstDel = arrOp2.begin();
+    DynamicArray<int>::iterator lastDel = arrOp2.begin();
     ++lastDel; ++lastDel;
 
     arrOp2.delIT_InRange(firstDel, lastDel);
@@ -92,14 +93,14 @@ int main()
     cout << "\n=== ТЕСТИРОВАНИЕ ОСНОВНЫХ МЕТОДОВ ===\n" << endl;
 
     cout << "1) Создание массива и проверка присваивания: ";
-    DynamicArray testDynamicArray1(testArray1, 14);
+    DynamicArray<int> testDynamicArray1(testArray1, 14);
 
     testDynamicArray1 = testDynamicArray1;
     printArray(testDynamicArray1);
 
     cout << "\n2) Копирование массива:\n";
     {
-        DynamicArray testDynamicArray2;
+        DynamicArray<int> testDynamicArray2;
         testDynamicArray2 = testDynamicArray1;
 
         int arrayLength = testDynamicArray2.getLength();
@@ -109,7 +110,7 @@ int main()
             testDynamicArray2[index] += 100;
         }
 
-        cout << "   Копия (+= 100): ";
+        cout << "   Copy (+= 100): ";
         printArray(testDynamicArray2);
     }
 
@@ -120,13 +121,13 @@ int main()
     testDynamicArray1.sort();
     printArray(testDynamicArray1);
 
-    testDynamicArray1 = DynamicArray(testArray1, 14);
+    testDynamicArray1 = DynamicArray<int>(testArray1, 14);
 
     cout << "\n4) Поиск, вставка и удаление элементов: \n";
     int valueToFind = 53;
     cout << "   Индекс элемента [" << valueToFind << "]: " << testDynamicArray1.find(valueToFind) << "\n";
 
-    DynamicArray copyTestArray = testDynamicArray1;
+    DynamicArray<int> copyTestArray = testDynamicArray1;
 
     copyTestArray.insertID(0, 999);
     cout << "   После вставки 999 в начало: ";
@@ -146,14 +147,14 @@ int main()
 
     cout << "\n6) Удаления всех элементов с заданным значением: \n";
     int dublicateArray[] = { 7, 1, 7, 7, 3, 7, 5 };
-    DynamicArray testDublicates(dublicateArray, 7);
+    DynamicArray<int> testDublicates(dublicateArray, 7);
     cout << "   Массив до удаления: " << testDublicates << endl;
     testDublicates.removeAllVal(7);
     cout << "   Массив после удаления всех элементов со значением 7: " << testDublicates << endl;
 
     cout << "\n7) Проверка метода swap: \n";
     int testArray2[] = { 1, 15, 90 };
-    DynamicArray testDynamicArray3(testArray2, 3);
+    DynamicArray<int> testDynamicArray3(testArray2, 3);
 
     cout << "   Массив A до: "; printArray(testDynamicArray1);
     cout << "   Массив B до: "; printArray(testDynamicArray3);
@@ -167,13 +168,13 @@ int main()
     cout << "\n8) Конкатенации массивов и сравнения (==, !=, +, +=): \n";
     int part1[] = { 1, 2 };
     int part2[] = { 3, 4 };
-    DynamicArray arrA(part1, 2);
-    DynamicArray arrB(part2, 2);
+    DynamicArray<int> arrA(part1, 2);
+    DynamicArray<int> arrB(part2, 2);
 
     cout << "   Массив А: " << arrA << endl;
     cout << "   Массив B: " << arrB << endl;
 
-    DynamicArray arrC = arrA + arrB;
+    DynamicArray<int> arrC = arrA + arrB;
     cout << "   Результат сложения A + B = C: " << arrC << endl;
 
     arrA += arrB;
@@ -183,11 +184,42 @@ int main()
     cout << "   Оператора неравенства (A != B): " << (arrA != arrB ? "Не равны" : "Равны") << endl;
 
     cout << "\n9) Проверка потокового ввода и вывода: \n";
-    DynamicArray userArray;
-
+    DynamicArray<int> userArray;
     cin >> userArray;
-
     cout << "   " << "Пользовательский массив: " << userArray << endl;
+
+    cout << "\n10) Тестирование со случайными числами:\n";
+
+    std::random_device randomDevice;
+    std::mt19937_64 generator(randomDevice());
+    std::uniform_int_distribution<int> arraySizeDistribution(0, 10);
+    std::uniform_int_distribution<int> arrayDataDistribution(-50, 50);
+
+    int randSize1 = arraySizeDistribution(generator);
+    int* randData1 = new int[randSize1];
+    for (int i = 0; i < randSize1; i++) randData1[i] = arrayDataDistribution(generator);
+
+    DynamicArray<int> array1(randData1, randSize1);
+
+    for (int index = 0; index < 10; index++)
+    {
+        array1 += arrayDataDistribution(generator);
+    }
+    std::cout << "   array1: " << array1 << std::endl;
+
+    DynamicArray<int> array2;
+
+    for (int index = 0; index < 5; index++)
+    {
+        array2 += arrayDataDistribution(generator);
+    }
+    std::cout << "   array2: " << array2 << std::endl;
+
+    array1 += array2;
+
+    std::cout << "   array1 += array2: " << array1 << std::endl;
+
+    delete[] randData1;
 
     return 0;
 }

@@ -123,7 +123,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DynamicArray.cpp" />
+    <ClInclude Include="DynamicArray.inl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </ClInclude>
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>

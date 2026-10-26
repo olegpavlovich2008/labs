@@ -1,16 +1,18 @@
 ﻿#include <assert.h>
 #include <iostream>
-#include "DynamicArray.h"
 
-DynamicArray::DynamicArray() : arrayData_(nullptr), arrayLength_(0)
+template<typename ItemType>
+DynamicArray<ItemType>::DynamicArray() : arrayData_(nullptr), arrayLength_(0)
 {
+
 }
 
-DynamicArray::DynamicArray(const int* const arrayData, const int arrayLength) : arrayLength_(arrayLength)
+template<typename ItemType>
+DynamicArray<ItemType>::DynamicArray(const ItemType* const arrayData, const int arrayLength) : arrayLength_(arrayLength)
 {
     if (arrayLength_ > 0)
     {
-        arrayData_ = new int[arrayLength_];
+        arrayData_ = new ItemType[arrayLength_];
         for (int index = 0; index < arrayLength_; index++)
             arrayData_[index] = arrayData[index];
     }
@@ -21,12 +23,13 @@ DynamicArray::DynamicArray(const int* const arrayData, const int arrayLength) : 
     }
 }
 
-DynamicArray::DynamicArray(const DynamicArray& other)
+template<typename ItemType>
+DynamicArray<ItemType>::DynamicArray(const DynamicArray& other)
 {
     arrayLength_ = other.arrayLength_;
     if (arrayLength_ > 0)
     {
-        arrayData_ = new int[arrayLength_];
+        arrayData_ = new ItemType[arrayLength_];
         for (int index = 0; index < arrayLength_; index++)
             arrayData_[index] = other.arrayData_[index];
     }
@@ -36,7 +39,8 @@ DynamicArray::DynamicArray(const DynamicArray& other)
     }
 }
 
-DynamicArray::DynamicArray(DynamicArray&& other)
+template<typename ItemType>
+DynamicArray<ItemType>::DynamicArray(DynamicArray&& other)
 {
     arrayLength_ = other.arrayLength_;
     arrayData_ = other.arrayData_;
@@ -45,12 +49,14 @@ DynamicArray::DynamicArray(DynamicArray&& other)
     other.arrayData_ = nullptr;
 }
 
-DynamicArray::~DynamicArray()
+template<typename ItemType>
+DynamicArray<ItemType>::~DynamicArray()
 {
     delete[] arrayData_;
 }
 
-DynamicArray& DynamicArray::operator=(const DynamicArray& other)
+template<typename ItemType>
+DynamicArray<ItemType>& DynamicArray<ItemType>::operator=(const DynamicArray& other)
 {
     if (this != &other)
     {
@@ -59,7 +65,7 @@ DynamicArray& DynamicArray::operator=(const DynamicArray& other)
 
         if (arrayLength_ > 0)
         {
-            arrayData_ = new int[arrayLength_];
+            arrayData_ = new ItemType[arrayLength_];
             for (int index = 0; index < arrayLength_; index++)
                 arrayData_[index] = other.arrayData_[index];
         }
@@ -71,7 +77,8 @@ DynamicArray& DynamicArray::operator=(const DynamicArray& other)
     return *this;
 }
 
-DynamicArray& DynamicArray::operator=(DynamicArray&& other)
+template<typename ItemType>
+DynamicArray<ItemType>& DynamicArray<ItemType>::operator=(DynamicArray&& other)
 {
     if (this != &other)
     {
@@ -86,26 +93,30 @@ DynamicArray& DynamicArray::operator=(DynamicArray&& other)
     return *this;
 }
 
-int& DynamicArray::operator[](const int index)
+template<typename ItemType>
+ItemType& DynamicArray<ItemType>::operator[](const int index)
 {
     assert((index >= 0 && index < arrayLength_) && "Индекс за пределами массива.");
     return arrayData_[index];
 }
 
-const int& DynamicArray::operator[](const int index) const
+template<typename ItemType>
+const ItemType& DynamicArray<ItemType>::operator[](const int index) const
 {
     assert((index >= 0 && index < arrayLength_) && "Индекс за пределами массива.");
     return arrayData_[index];
 }
 
-int DynamicArray::getLength() const
+template<typename ItemType>
+int DynamicArray<ItemType>::getLength() const
 {
     return arrayLength_;
 }
 
-void DynamicArray::swap(DynamicArray& other)
+template<typename ItemType>
+void DynamicArray<ItemType>::swap(DynamicArray& other)
 {
-    int* t = arrayData_;
+    ItemType* t = arrayData_;
     arrayData_ = other.arrayData_;
     other.arrayData_ = t;
 
@@ -114,7 +125,8 @@ void DynamicArray::swap(DynamicArray& other)
     other.arrayLength_ = t2;
 }
 
-int DynamicArray::find(int value) const
+template<typename ItemType>
+int DynamicArray<ItemType>::find(const ItemType& value) const
 {
     for (int index = 0; index < arrayLength_; index++)
     {
@@ -124,7 +136,8 @@ int DynamicArray::find(int value) const
     return -1;
 }
 
-void DynamicArray::sort() // шейкерная
+template<typename ItemType>
+void DynamicArray<ItemType>::sort()
 {
     if (arrayLength_ <= 1)
         return;
@@ -133,7 +146,7 @@ void DynamicArray::sort() // шейкерная
     int rt = arrayLength_ - 1;
     bool shifted = true;
 
-    while (lt < rt&& shifted)
+    while (lt < rt && shifted)
     {
         shifted = false;
 
@@ -141,7 +154,7 @@ void DynamicArray::sort() // шейкерная
         {
             if (arrayData_[i] > arrayData_[i + 1])
             {
-                int t = arrayData_[i];
+                ItemType t = arrayData_[i];
                 arrayData_[i] = arrayData_[i + 1];
                 arrayData_[i + 1] = t;
                 shifted = true;
@@ -153,7 +166,7 @@ void DynamicArray::sort() // шейкерная
         {
             if (arrayData_[i - 1] > arrayData_[i])
             {
-                int t = arrayData_[i];
+                ItemType t = arrayData_[i];
                 arrayData_[i] = arrayData_[i - 1];
                 arrayData_[i - 1] = t;
                 shifted = true;
@@ -163,11 +176,12 @@ void DynamicArray::sort() // шейкерная
     }
 }
 
-int DynamicArray::getMax() const
+template<typename ItemType>
+ItemType DynamicArray<ItemType>::getMax() const
 {
     assert(arrayLength_ > 0 && "Массив пуст.");
 
-    int maxVal = arrayData_[0];
+    ItemType maxVal = arrayData_[0];
     for (int i = 1; i < arrayLength_; i++)
     {
         if (arrayData_[i] > maxVal)
@@ -178,11 +192,12 @@ int DynamicArray::getMax() const
     return maxVal;
 }
 
-int DynamicArray::getMin() const
+template<typename ItemType>
+ItemType DynamicArray<ItemType>::getMin() const
 {
     assert(arrayLength_ > 0 && "Массив пуст.");
 
-    int minVal = arrayData_[0];
+    ItemType minVal = arrayData_[0];
     for (int i = 1; i < arrayLength_; i++)
     {
         if (arrayData_[i] < minVal)
@@ -193,12 +208,13 @@ int DynamicArray::getMin() const
     return minVal;
 }
 
-bool DynamicArray::insertID(const int index, int value)
+template<typename ItemType>
+bool DynamicArray<ItemType>::insertID(const int index, const ItemType& value)
 {
     if (index < 0 || index > arrayLength_)
         return false;
 
-    int* newBuffer = new int[arrayLength_ + 1];
+    ItemType* newBuffer = new ItemType[arrayLength_ + 1];
     for (int i = 0; i < index; i++)
         newBuffer[i] = arrayData_[i];
 
@@ -214,7 +230,8 @@ bool DynamicArray::insertID(const int index, int value)
     return true;
 }
 
-bool DynamicArray::removeID(const int index)
+template<typename ItemType>
+bool DynamicArray<ItemType>::removeID(const int index)
 {
     if (index < 0 || index >= arrayLength_)
         return false;
@@ -227,7 +244,7 @@ bool DynamicArray::removeID(const int index)
         return true;
     }
 
-    int* newBuffer = new int[arrayLength_ - 1];
+    ItemType* newBuffer = new ItemType[arrayLength_ - 1];
 
     for (int i = 0; i < index; i++)
         newBuffer[i] = arrayData_[i];
@@ -242,7 +259,8 @@ bool DynamicArray::removeID(const int index)
     return true;
 }
 
-bool DynamicArray::removeVal(int value)
+template<typename ItemType>
+bool DynamicArray<ItemType>::removeVal(const ItemType& value)
 {
     int index = find(value);
     if (index == -1)
@@ -251,7 +269,8 @@ bool DynamicArray::removeVal(int value)
     return removeID(index);
 }
 
-void DynamicArray::removeAllVal(int value)
+template<typename ItemType>
+void DynamicArray<ItemType>::removeAllVal(const ItemType& value)
 {
     int countToDelete = 0;
     for (int i = 0; i < arrayLength_; i++)
@@ -275,7 +294,7 @@ void DynamicArray::removeAllVal(int value)
         return;
     }
 
-    int* new_data = new int[newLength];
+    ItemType* new_data = new ItemType[newLength];
     int newIndex = 0;
 
     for (int i = 0; i < arrayLength_; i++)
@@ -291,7 +310,8 @@ void DynamicArray::removeAllVal(int value)
     arrayLength_ = newLength;
 }
 
-std::ostream& operator<<(std::ostream& os, const DynamicArray& array)
+template<typename ItemType>
+std::ostream& operator<<(std::ostream& os, const DynamicArray<ItemType>& array)
 {
     int len = array.getLength();
     if (len == 0)
@@ -312,7 +332,8 @@ std::ostream& operator<<(std::ostream& os, const DynamicArray& array)
     return os;
 }
 
-std::istream& operator>>(std::istream& is, DynamicArray& array)
+template<typename ItemType>
+std::istream& operator>>(std::istream& is, DynamicArray<ItemType>& array)
 {
     int length = 0;
     std::cout << "   Введите кол-во элементов массива: ";
@@ -320,16 +341,16 @@ std::istream& operator>>(std::istream& is, DynamicArray& array)
 
     if (length <= 0)
     {
-        DynamicArray emptyArray;
+        DynamicArray<ItemType> emptyArray;
         array.swap(emptyArray);
         return is;
     }
 
-    DynamicArray tempArray;
+    DynamicArray<ItemType> tempArray;
     std::cout << "   Введите элементы через пробел: ";
     for (int i = 0; i < length; i++)
     {
-        int val;
+        ItemType val;
         is >> val;
         tempArray.insertID(i, val);
     }
@@ -338,98 +359,116 @@ std::istream& operator>>(std::istream& is, DynamicArray& array)
     return is;
 }
 
-                                    // ИТЕРАТОРЫ //
+                                        // ИТЕРАТОРЫ //
 
-DynamicArray::iterator::iterator(int* arrayData, int elementIndex)
-    : arrayData_(arrayData), elementIndex_(elementIndex)
-{
-
-}
-
-DynamicArray::iterator DynamicArray::begin()
+template<typename ItemType>
+inline typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::begin()
 {
     return iterator(arrayData_, 0);
 }
 
-DynamicArray::iterator DynamicArray::end()
+template<typename ItemType>
+inline typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::end()
 {
     return iterator(arrayData_, arrayLength_);
 }
 
-bool DynamicArray::iterator::operator==(const iterator& otherIterator) const
-{
-    return (arrayData_ == otherIterator.arrayData_) && (elementIndex_ == otherIterator.elementIndex_);
-}
-
-bool DynamicArray::iterator::operator!=(const iterator& otherIterator) const
-{
-    return !(*this == otherIterator);
-}
-
-DynamicArray::iterator& DynamicArray::iterator::operator++()
-{
-    ++elementIndex_;
-    return *this;
-}
-
-DynamicArray::iterator DynamicArray::iterator::operator++(int)
-{
-    DynamicArray::iterator copy(*this);
-    ++elementIndex_;
-    return copy;
-}
-
-int& DynamicArray::iterator::operator*()
-{
-    return arrayData_[elementIndex_];
-}
-
-DynamicArray::const_iterator::const_iterator(const int* arrayData, int elementIndex)
-    : arrayData_(arrayData), elementIndex_(elementIndex)
-{
-}
-
-DynamicArray::const_iterator DynamicArray::begin() const
+template<typename ItemType>
+inline typename DynamicArray<ItemType>::const_iterator DynamicArray<ItemType>::begin() const
 {
     return const_iterator(arrayData_, 0);
 }
 
-DynamicArray::const_iterator DynamicArray::end() const
+template<typename ItemType>
+inline typename DynamicArray<ItemType>::const_iterator DynamicArray<ItemType>::end() const
 {
     return const_iterator(arrayData_, arrayLength_);
 }
 
-bool DynamicArray::const_iterator::operator==(const const_iterator& otherIterator) const
+template<typename ItemType>
+inline DynamicArray<ItemType>::iterator::iterator(ItemType* arrayData, int elementIndex)
+    : arrayData_(arrayData), elementIndex_(elementIndex)
+{
+
+}
+
+template<typename ItemType>
+inline bool DynamicArray<ItemType>::iterator::operator==(const iterator& otherIterator) const
 {
     return (arrayData_ == otherIterator.arrayData_) && (elementIndex_ == otherIterator.elementIndex_);
 }
 
-bool DynamicArray::const_iterator::operator!=(const const_iterator& otherIterator) const
+template<typename ItemType>
+inline bool DynamicArray<ItemType>::iterator::operator!=(const iterator& otherIterator) const
 {
     return !(*this == otherIterator);
 }
 
-DynamicArray::const_iterator& DynamicArray::const_iterator::operator++()
+template<typename ItemType>
+inline typename DynamicArray<ItemType>::iterator& DynamicArray<ItemType>::iterator::operator++()
 {
     ++elementIndex_;
     return *this;
 }
 
-DynamicArray::const_iterator DynamicArray::const_iterator::operator++(int)
+template<typename ItemType>
+inline typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::iterator::operator++(int)
 {
-    DynamicArray::const_iterator copy(*this);
+    typename DynamicArray<ItemType>::iterator copy(*this);
     ++elementIndex_;
     return copy;
 }
 
-const int& DynamicArray::const_iterator::operator*() const
+template<typename ItemType>
+inline ItemType& DynamicArray<ItemType>::iterator::operator*()
 {
     return arrayData_[elementIndex_];
 }
 
-DynamicArray& DynamicArray::operator+=(int value)
+template<typename ItemType>
+inline DynamicArray<ItemType>::const_iterator::const_iterator(const ItemType* arrayData, int elementIndex)
+    : arrayData_(arrayData), elementIndex_(elementIndex)
 {
-    int* new_data = new int[arrayLength_ + 1];
+
+}
+
+template<typename ItemType>
+inline bool DynamicArray<ItemType>::const_iterator::operator==(const const_iterator& otherIterator) const
+{
+    return (arrayData_ == otherIterator.arrayData_) && (elementIndex_ == otherIterator.elementIndex_);
+}
+
+template<typename ItemType>
+inline bool DynamicArray<ItemType>::const_iterator::operator!=(const const_iterator& otherIterator) const
+{
+    return !(*this == otherIterator);
+}
+
+template<typename ItemType>
+inline typename DynamicArray<ItemType>::const_iterator& DynamicArray<ItemType>::const_iterator::operator++()
+{
+    ++elementIndex_;
+    return *this;
+}
+
+template<typename ItemType>
+inline typename DynamicArray<ItemType>::const_iterator DynamicArray<ItemType>::const_iterator::operator++(int)
+{
+    typename DynamicArray<ItemType>::const_iterator copy(*this);
+    ++elementIndex_;
+    return copy;
+}
+
+template<typename ItemType>
+inline const ItemType& DynamicArray<ItemType>::const_iterator::operator*() const
+{
+    return arrayData_[elementIndex_];
+}
+
+template<typename ItemType>
+DynamicArray<ItemType>& DynamicArray<ItemType>::operator+=(const ItemType& value)
+{
+    ItemType* new_data = new ItemType[arrayLength_ + 1];
 
     for (int i = 0; i < arrayLength_; i++)
     {
@@ -445,19 +484,20 @@ DynamicArray& DynamicArray::operator+=(int value)
     return *this;
 }
 
-DynamicArray DynamicArray::operator+(int value) const
+template<typename ItemType>
+DynamicArray<ItemType> DynamicArray<ItemType>::operator+(const ItemType& value) const
 {
     DynamicArray result(*this);
     result += value;
     return result;
 }
 
-DynamicArray& DynamicArray::operator+=(const DynamicArray& other)
+template<typename ItemType>
+DynamicArray<ItemType>& DynamicArray<ItemType>::operator+=(const DynamicArray& other)
 {
     if (other.arrayLength_ == 0) return *this;
 
-    int newLength = arrayLength_ + other.arrayLength_;
-    int* new_data = new int[newLength];
+    int newLength = arrayLength_ + other.arrayLength_; ItemType* new_data = new ItemType[newLength];
 
     for (int i = 0; i < arrayLength_; i++)
     {
@@ -476,14 +516,16 @@ DynamicArray& DynamicArray::operator+=(const DynamicArray& other)
     return *this;
 }
 
-DynamicArray DynamicArray::operator+(const DynamicArray& other) const
+template<typename ItemType>
+DynamicArray<ItemType> DynamicArray<ItemType>::operator+(const DynamicArray& other) const
 {
     DynamicArray result(*this);
     result += other;
     return result;
 }
 
-bool DynamicArray::operator==(const DynamicArray& other) const
+template<typename ItemType>
+bool DynamicArray<ItemType>::operator==(const DynamicArray& other) const
 {
     if (arrayLength_ != other.arrayLength_) return false;
 
@@ -497,17 +539,19 @@ bool DynamicArray::operator==(const DynamicArray& other) const
     return true;
 }
 
-bool DynamicArray::operator!=(const DynamicArray& other) const
+template<typename ItemType>
+bool DynamicArray<ItemType>::operator!=(const DynamicArray& other) const
 {
     return !(*this == other);
 }
 
-DynamicArray::iterator DynamicArray::insertIT(iterator pos, int value)
+template<typename ItemType>
+typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::insertIT(iterator pos, const ItemType& value)
 {
     int index = pos.getIndex();
     assert(index >= 0 && index <= arrayLength_ && "Индекс за пределами массива.");
 
-    int* new_data = new int[arrayLength_ + 1];
+    ItemType* new_data = new ItemType[arrayLength_ + 1];
 
     for (int i = 0; i < index; i++)
     {
@@ -528,7 +572,8 @@ DynamicArray::iterator DynamicArray::insertIT(iterator pos, int value)
     return iterator(arrayData_, index);
 }
 
-DynamicArray::iterator DynamicArray::delIT(iterator pos)
+template<typename ItemType>
+typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::delIT(iterator pos)
 {
     int index = pos.getIndex();
     assert(index >= 0 && index < arrayLength_ && "Индекс за пределами массива.");
@@ -556,7 +601,8 @@ DynamicArray::iterator DynamicArray::delIT(iterator pos)
     return iterator(arrayData_, index);
 }
 
-DynamicArray::iterator DynamicArray::delIT_InRange(iterator first, iterator last)
+template<typename ItemType>
+typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::delIT_InRange(iterator first, iterator last)
 {
     int firstIdx = first.getIndex();
     int lastIdx = last.getIndex();
