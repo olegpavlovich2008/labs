@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 
 template<typename ItemType>
@@ -123,4 +123,4 @@ std::ostream& operator<<(std::ostream& os, const DynamicArray<ItemType>& array);
 template<typename ItemType>
 std::istream& operator>>(std::istream& is, DynamicArray<ItemType>& array);
 
-#include "DynamicArray.inl"
+#include "TemplateDynamicArray.inl"
