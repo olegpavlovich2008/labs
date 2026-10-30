@@ -14,6 +14,8 @@ int main()
 
     FILE* file = nullptr;
     fopen_s(&file, "Results.txt", "w");
+    FILE* arr_file = nullptr;
+    fopen_s(&arr_file, "arrays.txt", "w");
 
     cout << "=== СТАНДАРТНАЯ СОРТИРОВКА ШЕЛЛА ===\n";
     if (file) fprintf(file, "=== СТАНДАРТНАЯ СОРТИРОВКА ШЕЛЛА ===\n");
@@ -32,6 +34,17 @@ int main()
             fprintf(file, "%d ", arr[i]);
         }
         fprintf(file, "\n");
+    }
+
+    if (Sorted(arr))
+    {
+        cout << "Массив упорядочен.\n";
+        if (file) fprintf(file, "Массив упорядочен.\n");
+    }
+    else
+    {
+        cout << "Массив неупорядочен.\n";
+        if (file) fprintf(file, "Массив неупорядочен.\n");
     }
 
     ShellSort(arr, h);
@@ -96,6 +109,13 @@ int main()
                 original_array[i] = dist(gen);
             }
 
+            if (arr_file) {
+                fprintf(arr_file, "Размер: %d, Диапазон: [%d, %d]\n", currentSize, currentMin, currentMax);
+                for (int i = 0; i < currentSize; ++i) {
+                    fprintf(arr_file, "%d ", original_array[i]);
+                }
+            }
+
             vector<int> gapsShell = GetShell(currentSize);
             vector<int> gapsKnuth = GetKnuth(currentSize);
             vector<int> gapsSedgewick = GetSedgewick(currentSize);
@@ -151,10 +171,7 @@ int main()
             int avg_sedgewick = (int)(sum_time_sedgewick / 3.0);
 
 
-            cout << currentSize << "\t[" << currentMin << ", " << currentMax << "]\tСр. знач.\t"
-                << avg_shell << " мс\t\t"
-                << avg_knuth << " мс\t\t"
-                << avg_sedgewick << " мс\n";
+            cout << "Ср.знач.\t" << avg_shell << " мс\t\t" << avg_knuth << " мс\t\t" << avg_sedgewick << " мс\n";
 
             if (file) 
             {
@@ -171,6 +188,11 @@ int main()
     if (file)
     {
         fclose(file);
+    }
+
+    if (arr_file) 
+    {
+        fclose(arr_file);
     }
 
     return 0;
