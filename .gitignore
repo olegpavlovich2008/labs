@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/AlgLab03_ShellSort/arrays.txt
+/AlgLab03_ShellSort/Results.txt
